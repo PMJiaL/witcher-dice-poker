@@ -1,17 +1,29 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"log"
 	"math/rand/v2"
 	"net/http"
+	"os"
+	"os/signal"
+	"time"
 )
 
 func main() {
-	http.HandleFunc("GET /", func(w http.ResponseWriter, r *http.Request) {
+	logger := log.New(os.Stdout, "witcher-dice-poker server: ", log.Flags())
+	port, exists := os.LookupEnv("PORT")
+	if !exists {
+		logger.Fatalln("Unspecified environment variable PORT")
+	}
+	addr := "localhost:" + port
+	mux := http.NewServeMux()
+
+	mux.HandleFunc("GET /random", func(w http.ResponseWriter, r *http.Request) {
 		var dice [5]uint
-		for i := 0; i < 5; i++ {
+		for i := range dice {
 			dice[i] = rand.UintN(6) + 1
 		}
 		hand := MakeHand(dice)
@@ -19,35 +31,58 @@ func main() {
 		fmt.Fprintf(w, "%s\n", jsonStr)
 	})
 
-	http.HandleFunc("POST /", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("POST /switch", func(w http.ResponseWriter, r *http.Request) {
 		var (
 			hand     Hand
-			switched [5]bool
+			switches []uint
+			err      error = r.ParseForm()
 		)
-		err := r.ParseForm()
 		err = json.Unmarshal([]byte(r.FormValue("hand")), &hand)
-		err = json.Unmarshal([]byte(r.FormValue("switch")), &switched)
+		err = json.Unmarshal([]byte(r.FormValue("switches")), &switches)
 		if err != nil {
 			http.Error(w, "error parsing JSON data in the POST request", http.StatusBadRequest)
 			return
 		}
 
-		var dice [5]uint
-		for i := 0; i < 5; i++ {
-			if switched[i] {
-				dice[i] = rand.UintN(6) + 1
-			} else {
-				dice[i] = hand.Dice[i]
-			}
+		for i := range switches {
+			hand.Dice[switches[i]-1] = rand.UintN(6) + 1
+		}
+		hand = MakeHand(hand.Dice)
+
+		fmt.Fprintln(w, hand)
+	})
+
+	mux.HandleFunc("POST /evaluate", func(w http.ResponseWriter, r *http.Request) {
+		var (
+			hand Hand
+			dice [5]uint
+			err  error = r.ParseForm()
+		)
+		err = json.Unmarshal([]byte(r.FormValue("dice")), &dice)
+		if err != nil {
+			http.Error(w, "error parsing JSON data in the POST request", http.StatusBadRequest)
+			return
 		}
 		hand = MakeHand(dice)
 
 		fmt.Fprintln(w, hand)
 	})
 
-	addr := "127.0.0.1:2007"
-	fmt.Printf("Listening on %v\n", addr)
-	if err := http.ListenAndServe(addr, nil); err != nil {
-		log.Fatalln(err)
+	srv := &http.Server{Addr: addr, Handler: mux}
+	go func() {
+		logger.Printf("http: Listening on %v\n", addr)
+		if err := srv.ListenAndServe(); err != nil {
+			logger.Fatalln(err)
+		}
+	}()
+	stop := make(chan os.Signal, 1)
+	signal.Notify(stop, os.Interrupt)
+
+	<-stop
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+	if err := srv.Shutdown(ctx); err != nil {
+		panic(err)
 	}
 }

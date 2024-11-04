@@ -28,10 +28,9 @@ func MakeHand(dice [5]uint) Hand {
 		maxdup uint    = 0 // find the biggest pointer in the same loopopy
 	)
 	copy(h.Dice[:], dice[:])
-	for i := uint(0); i < 5; i++ {
-		count[dice[i]-1] += 1
-		var dup uint = count[dice[i]-1]
-		var die uint = dice[i]
+	for _, die := range dice {
+		count[die-1] += 1
+		var dup uint = count[die-1]
 
 		if dup > maxdup {
 			maxdup = dup
