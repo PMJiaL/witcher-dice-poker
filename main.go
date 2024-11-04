@@ -14,11 +14,6 @@ import (
 
 func main() {
 	logger := log.New(os.Stdout, "witcher-dice-poker server: ", log.Flags())
-	port, exists := os.LookupEnv("PORT")
-	if !exists {
-		logger.Fatalln("Unspecified environment variable PORT")
-	}
-	addr := "localhost:" + port
 	mux := http.NewServeMux()
 
 	mux.HandleFunc("GET /random", func(w http.ResponseWriter, r *http.Request) {
@@ -68,6 +63,7 @@ func main() {
 		fmt.Fprintln(w, hand)
 	})
 
+	addr := "0.0.0.0:2007"
 	srv := &http.Server{Addr: addr, Handler: mux}
 	go func() {
 		logger.Printf("http: Listening on %v\n", addr)
