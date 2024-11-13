@@ -13,10 +13,10 @@ import (
 )
 
 func main() {
-	logger := log.New(os.Stdout, "witcher-dice-poker server: ", log.Flags())
+	logger := log.New(os.Stdout, "server: ", log.Flags())
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("POST /hands/generate", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("POST /hands/random", func(w http.ResponseWriter, r *http.Request) {
 		var dice [5]uint
 		for i := range dice {
 			dice[i] = rand.UintN(6) + 1
