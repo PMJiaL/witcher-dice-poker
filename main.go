@@ -22,8 +22,8 @@ func main() {
 			dice[i] = rand.UintN(6) + 1
 		}
 		hand := MakeHand(dice)
-		jsonStr, _ := json.Marshal(hand) // assume Hand always marshalls correctly
-		fmt.Fprintf(w, "%s\n", jsonStr)
+		jsonStr, _ := json.Marshal(hand) // assume Hand always marshals correctly
+		_, _ = fmt.Fprintf(w, "%s\n", jsonStr)
 	})
 
 	mux.HandleFunc("PATCH /hands/switch", func(w http.ResponseWriter, r *http.Request) {
@@ -44,7 +44,7 @@ func main() {
 		}
 		hand = MakeHand(hand.Dice)
 
-		fmt.Fprintln(w, hand)
+		_, _ = fmt.Fprintln(w, hand)
 	})
 
 	mux.HandleFunc("POST /hands/evaluate", func(w http.ResponseWriter, r *http.Request) {
@@ -60,7 +60,7 @@ func main() {
 		}
 		hand = MakeHand(dice)
 
-		fmt.Fprintln(w, hand)
+		_, _ = fmt.Fprintln(w, hand)
 	})
 
 	addr := "0.0.0.0:2007"
