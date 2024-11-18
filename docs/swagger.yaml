@@ -1,0 +1,130 @@
+basePath: /
+definitions:
+  handler.evalRequest:
+    properties:
+      dice:
+        items:
+          type: integer
+        type: array
+    type: object
+  handler.updateRequest:
+    properties:
+      hand:
+        $ref: '#/definitions/model.Hand'
+      switches:
+        items:
+          type: integer
+        type: array
+    type: object
+  model.Hand:
+    properties:
+      dice:
+        items:
+          type: integer
+        type: array
+      leadval:
+        type: integer
+      rank:
+        $ref: '#/definitions/model.HandRank'
+      supval:
+        type: integer
+    type: object
+  model.HandRank:
+    enum:
+    - 0
+    - 1
+    - 2
+    - 3
+    - 4
+    - 5
+    - 6
+    - 7
+    - 8
+    type: integer
+    x-enum-varnames:
+    - Nothing
+    - Pair
+    - TwoPairs
+    - ThreeOfAKind
+    - FiveHighStraight
+    - SixHighStraight
+    - FullHouse
+    - FourOfAKind
+    - FiveOfAKind
+info:
+  contact:
+    email: penciller@disroot.org
+    name: Piotr (Depermitto) Jabłoński
+  description: Webserver serving a complete implementation of Witcher 1 (2007) dice
+    poker mini-game.
+  license:
+    name: MIT
+    url: https://opensource.org/license/mit
+  title: Witcher Dice Poker API
+  version: "1.0"
+paths:
+  /hands:
+    get:
+      description: Generate random dice poker hand
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Hand'
+      tags:
+      - Hands
+  /hands/eval:
+    patch:
+      consumes:
+      - application/json
+      description: Evaluate dice
+      parameters:
+      - description: Raw dice to evaluate. Value range (1-6), array length (5)
+        in: body
+        name: evalRequest
+        required: true
+        schema:
+          $ref: '#/definitions/handler.evalRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Hand created from dice
+          schema:
+            $ref: '#/definitions/model.Hand'
+        "400":
+          description: Bad Request
+          schema:
+            type: integer
+      tags:
+      - Hands
+  /hands/switch:
+    patch:
+      consumes:
+      - application/json
+      description: Update dice poker hand
+      parameters:
+      - description: Hand to modify along with list of dice indexes. Die at index
+          will be switched with a new, randomly generated value. Dice indexes (1-5),
+          array length (1-5)
+        in: body
+        name: updateRequest
+        required: true
+        schema:
+          $ref: '#/definitions/handler.updateRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Hand'
+        "400":
+          description: Bad Request
+          schema:
+            type: integer
+      tags:
+      - Hands
+swagger: "2.0"

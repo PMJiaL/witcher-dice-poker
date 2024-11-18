@@ -2,71 +2,49 @@ package main
 
 import (
 	"context"
-	"encoding/json"
+	"flag"
 	"fmt"
+	"github.com/go-chi/chi/v5"
+	httpSwagger "github.com/swaggo/http-swagger"
 	"log"
-	"math/rand/v2"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
+	_ "witcher-dice-poker/docs"
+	"witcher-dice-poker/handler"
 )
 
+//	@title			Witcher Dice Poker API
+//	@version		1.0
+//	@description	Webserver serving a complete implementation of Witcher 1 (2007) dice poker mini-game.
+
+//	@contact.name	Piotr (Depermitto) Jabłoński
+//	@contact.email	penciller@disroot.org
+
+//	@license.name	MIT
+//	@license.url	https://opensource.org/license/mit
+
+// @BasePath	/
 func main() {
+	port := flag.String("port", "2007", "Port to listen on")
+	flag.Parse()
+
 	logger := log.New(os.Stdout, "server: ", log.Flags())
-	mux := http.NewServeMux()
 
-	mux.HandleFunc("POST /hands/random", func(w http.ResponseWriter, r *http.Request) {
-		var dice [5]uint
-		for i := range dice {
-			dice[i] = rand.UintN(6) + 1
-		}
-		hand := MakeHand(dice)
-		jsonStr, _ := json.Marshal(hand) // assume Hand always marshals correctly
-		_, _ = fmt.Fprintf(w, "%s\n", jsonStr)
-	})
+	r := chi.NewRouter()
+	{
+		r.Get("/swagger/*", httpSwagger.Handler(
+			httpSwagger.URL(fmt.Sprintf("http://localhost:%v/swagger/doc.json", *port)),
+		))
+		r.Get("/hands", handler.GenerateHand)
+		r.Patch("/hands/switch", handler.UpdateHand)
+		r.Patch("/hands/eval", handler.EvaluateHand)
+	}
 
-	mux.HandleFunc("PATCH /hands/switch", func(w http.ResponseWriter, r *http.Request) {
-		var (
-			hand     Hand
-			switches []uint
-			err      error = r.ParseForm()
-		)
-		err = json.Unmarshal([]byte(r.FormValue("hand")), &hand)
-		err = json.Unmarshal([]byte(r.FormValue("switches")), &switches)
-		if err != nil {
-			http.Error(w, "error parsing JSON data in the POST request", http.StatusBadRequest)
-			return
-		}
-
-		for i := range switches {
-			hand.Dice[switches[i]-1] = rand.UintN(6) + 1
-		}
-		hand = MakeHand(hand.Dice)
-
-		_, _ = fmt.Fprintln(w, hand)
-	})
-
-	mux.HandleFunc("POST /hands/evaluate", func(w http.ResponseWriter, r *http.Request) {
-		var (
-			hand Hand
-			dice [5]uint
-			err  error = r.ParseForm()
-		)
-		err = json.Unmarshal([]byte(r.FormValue("dice")), &dice)
-		if err != nil {
-			http.Error(w, "error parsing JSON data in the POST request", http.StatusBadRequest)
-			return
-		}
-		hand = MakeHand(dice)
-
-		_, _ = fmt.Fprintln(w, hand)
-	})
-
-	addr := "0.0.0.0:2007"
-	srv := &http.Server{Addr: addr, Handler: mux}
+	srv := &http.Server{Addr: "0.0.0.0:" + *port, Handler: r}
 	go func() {
-		logger.Printf("http: Listening on %v\n", addr)
+		logger.Printf("http: Listening on :%v\n", *port)
 		if err := srv.ListenAndServe(); err != nil {
 			logger.Fatalln(err)
 		}

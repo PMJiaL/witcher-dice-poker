@@ -2,6 +2,6 @@ services:
   witcher-dice-poker:
     build: .
     container_name: witcher-dice-poker
-    image: witcher-dice-poker:0.1
+    image: witcher-dice-poker:0.2
     ports:
       - "2007:2007"
