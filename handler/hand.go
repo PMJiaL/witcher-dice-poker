@@ -16,19 +16,19 @@ import (
 //	@Produce		json
 //	@Success		200	{object}	model.Hand
 //	@Router			/hands [get]
-func GenerateHand(w http.ResponseWriter, r *http.Request) {
+func GenerateHand(w http.ResponseWriter, _ *http.Request) {
 	var dice [5]uint
 	for i := range dice {
 		dice[i] = rand.UintN(6) + 1
 	}
-	hand := model.MakeHand(dice)
+	hand, _ := model.MakeHand(dice)  // assume Hand always makes correctly
 	jsonStr, _ := json.Marshal(hand) // assume Hand always marshals correctly
 	_, _ = fmt.Fprintf(w, "%s\n", jsonStr)
 }
 
 type updateRequest struct {
 	Hand     model.Hand `json:"hand"`
-	Switches []uint     `json:"switches"`
+	Switches [5]uint    `json:"switches"`
 }
 
 // UpdateHand godoc
@@ -57,13 +57,16 @@ func UpdateHand(w http.ResponseWriter, r *http.Request) {
 	hand, switches := req.Hand, req.Switches
 
 	for _, s := range switches {
-		if s >= uint(len(hand.Dice)) {
-			http.Error(w, fmt.Sprintf("error: index %v out of range %v", s, len(hand.Dice)), http.StatusBadRequest)
+		if s < 1 || s > 6 {
+			http.Error(w, fmt.Sprintf("error: switch index %v out of range [1, 6]", s), http.StatusBadRequest)
 			return
 		}
 		hand.Dice[s-1] = rand.UintN(6) + 1
 	}
-	hand = model.MakeHand(hand.Dice)
+	hand, err = model.MakeHand(hand.Dice)
+	if err != nil {
+		http.Error(w, "error: "+err.Error(), http.StatusBadRequest)
+	}
 
 	_, _ = fmt.Fprintln(w, hand)
 }
@@ -95,7 +98,10 @@ func EvaluateHand(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "error: could not parse JSON data in req body", http.StatusBadRequest)
 		return
 	}
-	hand := model.MakeHand(req.Dice)
+	hand, err := model.MakeHand(req.Dice)
+	if err != nil {
+		http.Error(w, "error: "+err.Error(), http.StatusBadRequest)
+	}
 
 	_, _ = fmt.Fprintln(w, hand)
 }

@@ -1,5 +1,9 @@
 package model
 
+import (
+	"fmt"
+)
+
 type HandRank uint
 
 const (
@@ -21,15 +25,17 @@ type Hand struct {
 	Supval  uint     `json:"supval"`
 }
 
-func MakeHand(dice [5]uint) Hand {
+func MakeHand(dice [5]uint) (Hand, error) {
 	var (
 		h      Hand    = Hand{Rank: Nothing, Leadval: 0, Supval: 0, Dice: [5]uint{}}
 		count  [6]uint     // treat it like a hashmap [(index+1) == die roll] -> count
 		maxdup uint    = 0 // find the biggest pointer in the same loop
 	)
-	// TODO: crashes on incorrect amount of dice elements
 	copy(h.Dice[:], dice[:])
 	for _, die := range dice {
+		if die < 1 || die > 6 {
+			return Hand{}, fmt.Errorf("incorrect die value, expected value in [1, 6] range, got %v", die)
+		}
 		count[die-1] += 1
 		var dup uint = count[die-1]
 
@@ -72,5 +78,5 @@ func MakeHand(dice [5]uint) Hand {
 			h.Leadval = 0
 		}
 	}
-	return h
+	return h, nil
 }
