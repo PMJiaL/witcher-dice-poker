@@ -4,6 +4,8 @@ import (
 	"context"
 	"flag"
 	"fmt"
+	_ "github.com/Depermitto/witcher-dice-poker/docs"
+	"github.com/Depermitto/witcher-dice-poker/handler"
 	"github.com/go-chi/chi/v5"
 	httpSwagger "github.com/swaggo/http-swagger"
 	"log"
@@ -11,8 +13,6 @@ import (
 	"os"
 	"os/signal"
 	"time"
-	_ "witcher-dice-poker/docs"
-	"witcher-dice-poker/handler"
 )
 
 //	@title			Witcher Dice Poker API
@@ -34,12 +34,14 @@ func main() {
 
 	r := chi.NewRouter()
 	{
-		r.Get("/swagger/*", httpSwagger.Handler(
-			httpSwagger.URL(fmt.Sprintf("http://localhost:%v/swagger/doc.json", *port)),
-		))
+		if os.Getenv("APP_ENV") != "production" {
+			addr := fmt.Sprintf("http://localhost:%v/swagger/", *port)
+			r.Get("/swagger/*", httpSwagger.Handler(httpSwagger.URL(addr+"doc.json")))
+			logger.Printf("Swagger UI available at %v\n", addr+"index.html")
+		}
 		r.Get("/hands", handler.GenerateHand)
-		r.Patch("/hands/switch", handler.UpdateHand)
-		r.Patch("/hands/eval", handler.EvaluateHand)
+		r.Post("/hands/switch", handler.UpdateHand)
+		r.Post("/hands/eval", handler.EvaluateHand)
 	}
 
 	srv := &http.Server{Addr: "0.0.0.0:" + *port, Handler: r}

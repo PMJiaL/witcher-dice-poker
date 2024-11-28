@@ -2,6 +2,8 @@ services:
   witcher-dice-poker:
     build: .
     container_name: witcher-dice-poker
-    image: witcher-dice-poker:0.3
+    image: witcher-dice-poker:0.4
     ports:
       - "2007:2007"
+    environment:
+      - APP_ENV=production
