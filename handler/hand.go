@@ -28,7 +28,7 @@ func GenerateHand(w http.ResponseWriter, _ *http.Request) {
 
 type updateRequest struct {
 	Hand     model.Hand `json:"hand"`
-	Switches [5]uint    `json:"switches"`
+	Switches []uint     `json:"switches"`
 }
 
 // UpdateHand godoc
@@ -54,21 +54,25 @@ func UpdateHand(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "error: could not parse JSON data in req body", http.StatusBadRequest)
 		return
 	}
-	hand, switches := req.Hand, req.Switches
 
-	for _, s := range switches {
+	if len(req.Switches) <= 0 || len(req.Switches) > 5 {
+		http.Error(w, "error: switches array must of length [1-5]", http.StatusBadRequest)
+		return
+	}
+
+	for _, s := range req.Switches {
 		if s < 1 || s > 6 {
 			http.Error(w, fmt.Sprintf("error: switch index %v out of range [1, 6]", s), http.StatusBadRequest)
 			return
 		}
-		hand.Dice[s-1] = rand.UintN(6) + 1
+		req.Hand.Dice[s-1] = rand.UintN(6) + 1
 	}
-	hand, err = model.MakeHand(hand.Dice)
+	req.Hand, err = model.MakeHand(req.Hand.Dice)
 	if err != nil {
 		http.Error(w, "error: "+err.Error(), http.StatusBadRequest)
 	}
 
-	_, _ = fmt.Fprintln(w, hand)
+	_, _ = fmt.Fprintln(w, req.Hand)
 }
 
 type evalRequest struct {
