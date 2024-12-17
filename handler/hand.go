@@ -9,14 +9,14 @@ import (
 	"net/http"
 )
 
-// GenerateHand godoc
+// RandomHand godoc
 //
 //	@Description	Generate random dice poker hand
 //	@Tags			Hands
 //	@Produce		json
 //	@Success		200	{object}	model.Hand
-//	@Router			/hands [get]
-func GenerateHand(w http.ResponseWriter, _ *http.Request) {
+//	@Router			/hands/random [get]
+func RandomHand(w http.ResponseWriter, _ *http.Request) {
 	var dice [5]uint
 	for i := range dice {
 		dice[i] = rand.UintN(6) + 1

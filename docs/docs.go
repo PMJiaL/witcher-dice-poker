@@ -22,25 +22,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/hands": {
-            "get": {
-                "description": "Generate random dice poker hand",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Hands"
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/model.Hand"
-                        }
-                    }
-                }
-            }
-        },
         "/hands/eval": {
             "post": {
                 "description": "Evaluate dice",
@@ -75,6 +56,25 @@ const docTemplate = `{
                         "description": "Bad Request",
                         "schema": {
                             "type": "integer"
+                        }
+                    }
+                }
+            }
+        },
+        "/hands/random": {
+            "get": {
+                "description": "Generate random dice poker hand",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Hands"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/model.Hand"
                         }
                     }
                 }
