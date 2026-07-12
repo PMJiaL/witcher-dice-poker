@@ -1,0 +1,55 @@
+name: Standard CI
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v6
+
+      - name: set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: build
+        run: go build ./...
+
+      - name: test
+        run: go test ./...
+
+  swagger:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v6
+
+      - name: set up Go
+        uses: actions/setup-go@v6
+        with:
+          go-version-file: go.mod
+          cache: true
+
+      - name: install Swag
+        run: go install github.com/swaggo/swag/cmd/swag@v1.16.6
+
+      - name: format Swagger annotations
+        run: swag fmt
+
+      - name: generate Swagger documentation
+        run: swag init
+
+      - name: verify Swagger documentation
+        run: git diff --exit-code
