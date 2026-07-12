@@ -126,4 +126,17 @@ paths:
             type: integer
       tags:
       - Hands
+  /ping:
+    get:
+      description: Check whether the server is running
+      produces:
+      - text/plain
+      responses:
+        "200":
+          description: .
+          schema:
+            type: string
+      summary: Heartbeat
+      tags:
+      - Health
 swagger: "2.0"

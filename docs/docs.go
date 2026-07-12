@@ -118,6 +118,26 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/ping": {
+            "get": {
+                "description": "Check whether the server is running",
+                "produces": [
+                    "text/plain"
+                ],
+                "tags": [
+                    "Health"
+                ],
+                "summary": "Heartbeat",
+                "responses": {
+                    "200": {
+                        "description": ".",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
