@@ -4,23 +4,24 @@ import (
 	"context"
 	"flag"
 	"fmt"
-	_ "github.com/Depermitto/witcher-dice-poker/docs"
-	"github.com/Depermitto/witcher-dice-poker/handler"
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
-	httpSwagger "github.com/swaggo/http-swagger"
 	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"time"
+
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
+	httpSwagger "github.com/swaggo/http-swagger"
+	_ "go.pmjlab.com/witcher-dice-poker/docs"
+	"go.pmjlab.com/witcher-dice-poker/handler"
 )
 
 //	@title			Witcher Dice Poker API
 //	@version		1.0
 //	@description	Webserver serving a complete implementation of Witcher 1 (2007) dice poker mini-game.
 
-//	@contact.name	Piotr (Depermitto) Jabłoński
+//	@contact.name	Piotr Jabłoński
 //	@contact.email	penciller@disroot.org
 
 //	@license.name	MIT

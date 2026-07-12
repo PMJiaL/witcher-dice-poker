@@ -3,10 +3,11 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/Depermitto/witcher-dice-poker/model"
 	"io"
 	"math/rand/v2"
 	"net/http"
+
+	"go.pmjlab.com/witcher-dice-poker/model"
 )
 
 // RandomHand godoc
