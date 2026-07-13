@@ -6,8 +6,6 @@ services:
     #   driver: journald
     ports:
       - "2007:2007"
-    environment:
-      APP_ENV: production
     healthcheck:
       test: [ "CMD", "/bin/busybox", "wget", "--quiet", "--spider", "http://localhost:2007/ping" ]
       interval: 30s

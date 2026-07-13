@@ -44,7 +44,7 @@ func main() {
 	r.Use(middleware.Heartbeat("/ping"))
 	r.Use(middleware.Logger)
 	{
-		if os.Getenv("APP_ENV") != "production" {
+		if _, showSwagger := os.LookupEnv("WDP_SHOW_SWAGGER"); showSwagger {
 			addr := fmt.Sprintf("http://localhost:%v/swagger/", *port)
 			r.Get("/swagger/*", httpSwagger.Handler(httpSwagger.URL(addr+"doc.json")))
 			logger.Printf("Swagger UI available at %v\n", addr+"index.html")
