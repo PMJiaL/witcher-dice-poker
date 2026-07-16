@@ -2,11 +2,7 @@ name: Standard CI
 
 on:
   push:
-    branches:
-      - master
   pull_request:
-    branches:
-      - master
 
 permissions:
   contents: read
@@ -16,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: set up Go
         uses: actions/setup-go@v6
@@ -34,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: set up Go
         uses: actions/setup-go@v6

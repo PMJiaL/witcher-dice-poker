@@ -8,11 +8,15 @@ in the form of a self-hostable API service.
 
 All endpoints are documented in code and [here](./docs).
 Or you can set `WDP_SHOW_SWAGGER` and check out
-the [Swagger UI](https://editor.swagger.io/?url=https://raw.githubusercontent.com/PMJiaL/witcher-dice-poker/master/docs/swagger.yaml), which is built into the program.
+the [Swagger UI](https://editor.swagger.io/?url=https://raw.githubusercontent.com/PMJiaL/witcher-dice-poker/master/docs/swagger.yaml),
+which is built into the program.
 
 ## Getting started
 
-Download the Compose file:
+Prebuilt binaries are available from [Releases](../../releases/latest) for Linux,
+macOS and Windows on both `amd64` and `arm64` architectures. Inside the archive there should be
+a single executable file, ready to go. If you prefer a container-based approach, feel free to
+download the Compose file:
 
 ```shell
 wget https://raw.githubusercontent.com/PMJiaL/witcher-dice-poker/master/compose.yaml
