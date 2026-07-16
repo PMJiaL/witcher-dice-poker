@@ -1,19 +1,21 @@
 # Witcher (2007) dice poker game service
 
+[![View in Swagger](https://img.shields.io/badge/Swagger_UI-View_API_Docs-85EA2D?logo=swagger)](https://editor.swagger.io/?url=https://raw.githubusercontent.com/PMJiaL/witcher-dice-poker/master/docs/swagger.yaml)
+
 This repository hold an implementation of the Witcher (2007) dice poker game (refer
 to [this website](https://witcher.fandom.com/wiki/The_Witcher_dice_poker) for more info)
 in the form of a self-hostable API service.
 
 All endpoints are documented in code and [here](./docs).
 Or you can set `WDP_SHOW_SWAGGER` and check out
-the [Swagger UI](https://swagger.io/tools/swagger-ui/), which is built into the program.
+the [Swagger UI](https://editor.swagger.io/?url=https://raw.githubusercontent.com/PMJiaL/witcher-dice-poker/master/docs/swagger.yaml), which is built into the program.
 
 ## Getting started
 
 Download the Compose file:
 
 ```shell
-curl -O https://raw.githubusercontent.com/PMJiaL/witcher-dice-poker/master/compose.yaml
+wget https://raw.githubusercontent.com/PMJiaL/witcher-dice-poker/master/compose.yaml
 ```
 
 or copy and paste its contents into your own compose file:
@@ -43,7 +45,7 @@ Then run the webservice using **Docker Compose**:
 docker compose up -d
 ```
 
-Or **Podman Compose**:
+or **Podman Compose**:
 
 ```shell
 podman-compose up -d
@@ -63,9 +65,8 @@ go build -o main
 
 ### Configuration
 
-- WDP_SHOW_SWAGGER: when present, `http://addr:port/swagger` endpoint will be exposed.
+- WDP_SHOW_SWAGGER: when present, `http://addr:port/swagger/*` endpoint will be exposed.
 
 ## License
 
 Licensed under the terms of the [MIT License](LICENSE).
-
