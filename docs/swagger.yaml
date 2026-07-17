@@ -1,4 +1,3 @@
-basePath: /
 definitions:
   handler.evalRequest:
     properties:

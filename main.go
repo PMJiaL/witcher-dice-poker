@@ -25,7 +25,7 @@ import (
 //	@license.name	MIT
 //	@license.url	https://opensource.org/license/mit
 
-// @BasePath	/
+// @BasePath
 func main() {
 	port := flag.String("port", "2007", "Port to listen on")
 	flag.Parse()

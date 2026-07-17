@@ -198,7 +198,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "",
-	BasePath:         "/",
+	BasePath:         "",
 	Schemes:          []string{},
 	Title:            "Witcher Dice Poker API",
 	Description:      "Webserver serving a complete implementation of Witcher 1 (2007) dice poker mini-game.",
