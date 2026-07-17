@@ -16,7 +16,7 @@ func main() {
 	logger := log.New(os.Stdout, "witcher-dice-poker server: ", log.Flags())
 	mux := http.NewServeMux()
 
-	mux.HandleFunc("GET /random", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("POST /hands/generate", func(w http.ResponseWriter, r *http.Request) {
 		var dice [5]uint
 		for i := range dice {
 			dice[i] = rand.UintN(6) + 1
@@ -26,7 +26,7 @@ func main() {
 		fmt.Fprintf(w, "%s\n", jsonStr)
 	})
 
-	mux.HandleFunc("POST /switch", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("PATCH /hands/switch", func(w http.ResponseWriter, r *http.Request) {
 		var (
 			hand     Hand
 			switches []uint
@@ -47,7 +47,7 @@ func main() {
 		fmt.Fprintln(w, hand)
 	})
 
-	mux.HandleFunc("POST /evaluate", func(w http.ResponseWriter, r *http.Request) {
+	mux.HandleFunc("POST /hands/evaluate", func(w http.ResponseWriter, r *http.Request) {
 		var (
 			hand Hand
 			dice [5]uint

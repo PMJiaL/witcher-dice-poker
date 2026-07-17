@@ -3,15 +3,15 @@ package main
 type HandRank uint
 
 const (
-	NOTHING HandRank = iota
-	PAIR
-	TWO_PAIRS
-	THREE_OF_A_KIND
-	FIVE_HIGH_STRAIGHT
-	SIX_HIGH_STRAIGHT
-	FULL_HOUSE
-	FOUR_OF_A_KIND
-	FIVE_OF_A_KIND
+	Nothing HandRank = iota
+	Pair
+	TwoPairs
+	ThreeOfAKind
+	FiveHighStraight
+	SixHighStraight
+	FullHouse
+	FourOfAKind
+	FiveOfAKind
 )
 
 type Hand struct {
@@ -23,7 +23,7 @@ type Hand struct {
 
 func MakeHand(dice [5]uint) Hand {
 	var (
-		h      Hand    = Hand{Rank: NOTHING, Leadval: 0, Supval: 0, Dice: [5]uint{}}
+		h      Hand    = Hand{Rank: Nothing, Leadval: 0, Supval: 0, Dice: [5]uint{}}
 		count  [6]uint     // treat it like a hashmap [(index+1) == die roll] -> countar
 		maxdup uint    = 0 // find the biggest pointer in the same loopopy
 	)
@@ -47,27 +47,27 @@ func MakeHand(dice [5]uint) Hand {
 
 	switch maxdup {
 	case 5:
-		h.Rank = FIVE_OF_A_KIND
+		h.Rank = FiveOfAKind
 	case 4:
-		h.Rank = FOUR_OF_A_KIND
+		h.Rank = FourOfAKind
 	case 3:
 		if h.Supval != 0 {
-			h.Rank = FULL_HOUSE
+			h.Rank = FullHouse
 		} else {
-			h.Rank = THREE_OF_A_KIND
+			h.Rank = ThreeOfAKind
 		}
 	case 2:
 		if h.Supval != 0 {
-			h.Rank = TWO_PAIRS
+			h.Rank = TwoPairs
 		} else {
-			h.Rank = PAIR
+			h.Rank = Pair
 		}
 	default:
 		if count[0] == 0 {
-			h.Rank = SIX_HIGH_STRAIGHT
+			h.Rank = SixHighStraight
 			h.Leadval = 0
 		} else if count[5] == 0 {
-			h.Rank = FIVE_HIGH_STRAIGHT
+			h.Rank = FiveHighStraight
 			h.Leadval = 0
 		}
 	}
