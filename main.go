@@ -36,6 +36,7 @@ import (
 // @Success		200	{string}	string	"."
 // @Router			/ping [get]
 func main() {
+	host := flag.String("host", "0.0.0.0", "Host to listen on")
 	port := flag.String("port", "2007", "Port to listen on")
 	flag.Parse()
 
@@ -54,7 +55,7 @@ func main() {
 		r.Post("/hands/eval", handler.EvaluateHand)
 	}
 
-	srv := &http.Server{Addr: "0.0.0.0:" + *port, Handler: r}
+	srv := &http.Server{Addr: *host + ":" + *port, Handler: r}
 	go func() {
 		logger.Printf("Listening on port %v\n", *port)
 		if err := srv.ListenAndServe(); err != nil {
