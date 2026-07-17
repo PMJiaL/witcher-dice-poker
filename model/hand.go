@@ -1,4 +1,4 @@
-package main
+package model
 
 type HandRank uint
 
@@ -24,9 +24,10 @@ type Hand struct {
 func MakeHand(dice [5]uint) Hand {
 	var (
 		h      Hand    = Hand{Rank: Nothing, Leadval: 0, Supval: 0, Dice: [5]uint{}}
-		count  [6]uint     // treat it like a hashmap [(index+1) == die roll] -> countar
-		maxdup uint    = 0 // find the biggest pointer in the same loopopy
+		count  [6]uint     // treat it like a hashmap [(index+1) == die roll] -> count
+		maxdup uint    = 0 // find the biggest pointer in the same loop
 	)
+	// TODO: crashes on incorrect amount of dice elements
 	copy(h.Dice[:], dice[:])
 	for _, die := range dice {
 		count[die-1] += 1
