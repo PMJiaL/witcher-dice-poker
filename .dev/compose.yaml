@@ -1,7 +1,7 @@
 services:
   witcher-dice-poker:
     build: ..
-    image: witcher-dice-poker:1.0.0rc
+    image: witcher-dice-poker:1.0.0
     container_name: witcher-dice-poker
     ports:
       - "2007:2007"
