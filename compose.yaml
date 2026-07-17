@@ -1,6 +1,6 @@
 services:
   witcher-dice-poker:
-    image: ghcr.io/depermitto/witcher-dice-poker:latest
+    image: ghcr.io/pmjial/witcher-dice-poker:latest
     container_name: witcher-dice-poker
     # logging:
     #   driver: journald
