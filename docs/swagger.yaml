@@ -62,18 +62,6 @@ info:
   title: Witcher Dice Poker API
   version: "1.0"
 paths:
-  /hands:
-    get:
-      description: Generate random dice poker hand
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/model.Hand'
-      tags:
-      - Hands
   /hands/eval:
     post:
       consumes:
@@ -97,6 +85,18 @@ paths:
           description: Bad Request
           schema:
             type: integer
+      tags:
+      - Hands
+  /hands/random:
+    get:
+      description: Generate random dice poker hand
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.Hand'
       tags:
       - Hands
   /hands/switch:

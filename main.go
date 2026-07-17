@@ -40,7 +40,7 @@ func main() {
 			r.Get("/swagger/*", httpSwagger.Handler(httpSwagger.URL(addr+"doc.json")))
 			logger.Printf("Swagger UI available at %v\n", addr+"index.html")
 		}
-		r.Get("/hands", handler.GenerateHand)
+		r.Get("/hands/random", handler.RandomHand)
 		r.Post("/hands/switch", handler.UpdateHand)
 		r.Post("/hands/eval", handler.EvaluateHand)
 	}
