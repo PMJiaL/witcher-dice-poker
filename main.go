@@ -28,12 +28,20 @@ import (
 //	@license.url	https://opensource.org/license/mit
 
 // @BasePath
+//
+// @Summary		Heartbeat
+// @Description	Check whether the server is running
+// @Tags			Health
+// @Produce		plain
+// @Success		200	{string}	string	"."
+// @Router			/ping [get]
 func main() {
 	port := flag.String("port", "2007", "Port to listen on")
 	flag.Parse()
 
 	logger := log.New(os.Stdout, log.Prefix(), log.Flags())
 	r := chi.NewRouter()
+	r.Use(middleware.Heartbeat("/ping"))
 	r.Use(middleware.Logger)
 	{
 		if os.Getenv("APP_ENV") != "production" {
