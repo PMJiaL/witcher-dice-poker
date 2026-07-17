@@ -4,7 +4,7 @@
         "description": "Webserver serving a complete implementation of Witcher 1 (2007) dice poker mini-game.",
         "title": "Witcher Dice Poker API",
         "contact": {
-            "name": "Piotr (Depermitto) Jabłoński",
+            "name": "Piotr Jabłoński",
             "email": "penciller@disroot.org"
         },
         "license": {

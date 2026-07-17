@@ -1,0 +1,31 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: check-merge-conflict
+      - id: trailing-whitespace
+      - id: check-yaml
+      - id: check-added-large-files
+        args: [--maxkb=1000]
+      - id: mixed-line-ending
+
+  - repo: local
+    hooks:
+      - id: swag-init
+        name: generate Swagger documentation
+        entry: swag
+        args: [init]
+        language: golang
+        additional_dependencies:
+          - github.com/swaggo/swag/cmd/swag@v1.16.6
+        pass_filenames: false
+        always_run: true
+      - id: swag-fmt
+        name: format Swagger annotations
+        entry: swag
+        args: [fmt]
+        language: golang
+        additional_dependencies:
+          - github.com/swaggo/swag/cmd/swag@v1.16.6
+        pass_filenames: false
+        always_run: true

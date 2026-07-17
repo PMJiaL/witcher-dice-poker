@@ -10,7 +10,7 @@ const docTemplate = `{
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
         "contact": {
-            "name": "Piotr (Depermitto) Jabłoński",
+            "name": "Piotr Jabłoński",
             "email": "penciller@disroot.org"
         },
         "license": {
