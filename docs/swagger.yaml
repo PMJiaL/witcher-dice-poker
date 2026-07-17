@@ -75,7 +75,7 @@ paths:
       tags:
       - Hands
   /hands/eval:
-    patch:
+    post:
       consumes:
       - application/json
       description: Evaluate dice
@@ -100,7 +100,7 @@ paths:
       tags:
       - Hands
   /hands/switch:
-    patch:
+    post:
       consumes:
       - application/json
       description: Update dice poker hand

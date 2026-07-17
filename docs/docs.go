@@ -42,7 +42,7 @@ const docTemplate = `{
             }
         },
         "/hands/eval": {
-            "patch": {
+            "post": {
                 "description": "Evaluate dice",
                 "consumes": [
                     "application/json"
@@ -81,7 +81,7 @@ const docTemplate = `{
             }
         },
         "/hands/switch": {
-            "patch": {
+            "post": {
                 "description": "Update dice poker hand",
                 "consumes": [
                     "application/json"

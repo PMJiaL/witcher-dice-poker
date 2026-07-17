@@ -3,10 +3,10 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/Depermitto/witcher-dice-poker/model"
 	"io"
 	"math/rand/v2"
 	"net/http"
-	"witcher-dice-poker/model"
 )
 
 // GenerateHand godoc
@@ -40,7 +40,7 @@ type updateRequest struct {
 //	@Param			updateRequest	body		updateRequest	true	"Hand to modify along with list of dice indexes. Die at index will be switched with a new, randomly generated value. Dice indexes (1-5), array length (1-5)"
 //	@Success		200				{object}	model.Hand
 //	@Failure		400				{object}	int
-//	@Router			/hands/switch [patch]
+//	@Router			/hands/switch [post]
 func UpdateHand(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
@@ -84,7 +84,7 @@ type evalRequest struct {
 //	@Param			evalRequest	body		evalRequest	true	"Raw dice to evaluate. Value range (1-6), array length (5)"
 //	@Success		200			{object}	model.Hand	"Hand created from dice"
 //	@Failure		400			{object}	int
-//	@Router			/hands/eval [patch]
+//	@Router			/hands/eval [post]
 func EvaluateHand(w http.ResponseWriter, r *http.Request) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
