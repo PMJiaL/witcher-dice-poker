@@ -73,7 +73,8 @@ func UpdateHand(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "error: "+err.Error(), http.StatusBadRequest)
 	}
 
-	_, _ = fmt.Fprintln(w, req.Hand)
+	jsonStr, _ := json.Marshal(req.Hand)
+	_, _ = fmt.Fprintf(w, "%s\n", jsonStr)
 }
 
 type evalRequest struct {
@@ -108,5 +109,6 @@ func EvaluateHand(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "error: "+err.Error(), http.StatusBadRequest)
 	}
 
-	_, _ = fmt.Fprintln(w, hand)
+	jsonStr, _ := json.Marshal(hand)
+	_, _ = fmt.Fprintf(w, "%s\n", jsonStr)
 }
