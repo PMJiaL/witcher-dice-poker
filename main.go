@@ -7,6 +7,7 @@ import (
 	_ "github.com/Depermitto/witcher-dice-poker/docs"
 	"github.com/Depermitto/witcher-dice-poker/handler"
 	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	httpSwagger "github.com/swaggo/http-swagger"
 	"log"
 	"net/http"
@@ -30,9 +31,9 @@ func main() {
 	port := flag.String("port", "2007", "Port to listen on")
 	flag.Parse()
 
-	logger := log.New(os.Stdout, "server: ", log.Flags())
-
+	logger := log.New(os.Stdout, log.Prefix(), log.Flags())
 	r := chi.NewRouter()
+	r.Use(middleware.Logger)
 	{
 		if os.Getenv("APP_ENV") != "production" {
 			addr := fmt.Sprintf("http://localhost:%v/swagger/", *port)
@@ -46,7 +47,7 @@ func main() {
 
 	srv := &http.Server{Addr: "0.0.0.0:" + *port, Handler: r}
 	go func() {
-		logger.Printf("http: Listening on :%v\n", *port)
+		logger.Printf("Listening on port %v\n", *port)
 		if err := srv.ListenAndServe(); err != nil {
 			logger.Fatalln(err)
 		}
